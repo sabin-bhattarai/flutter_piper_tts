@@ -8,6 +8,8 @@ import 'piper_model.dart';
 
 class ModelDownloader {
   static const String _baseUrl = 'https://huggingface.co/csukuangfj';
+  static const String _nepaliModelRepo =
+      'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-medium_int8.onnx';
   static const String _espeakUrl = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/espeak-ng-data.tar.bz2';
 
   /// Downloads the espeak-ng-data if it doesn't exist.
@@ -52,7 +54,7 @@ class ModelDownloader {
 
     String repoName;
     String modelFileName;
-    
+
     if (language == 'en') {
       repoName = 'vits-piper-en_US-lessac-medium';
       modelFileName = 'en_US-lessac-medium.onnx';
@@ -71,8 +73,18 @@ class ModelDownloader {
     final modelPath = p.join(modelDir.path, modelFileName);
     final tokensPath = p.join(modelDir.path, 'tokens.txt');
 
-    await _downloadFile('$_baseUrl/$repoName/resolve/main/$modelFileName', modelPath);
-    await _downloadFile('$_baseUrl/$repoName/resolve/main/tokens.txt', tokensPath);
+    if (language == 'ne') {
+      await _downloadFile(_nepaliModelRepo, modelPath);
+    } else {
+      await _downloadFile(
+        '$_baseUrl/$repoName/resolve/main/$modelFileName',
+        modelPath,
+      );
+    }
+    await _downloadFile(
+      '$_baseUrl/$repoName/resolve/main/tokens.txt',
+      tokensPath,
+    );
 
     return PiperModel(
       modelPath: modelPath,
@@ -88,7 +100,9 @@ class ModelDownloader {
     print('Downloading $url...');
     final response = await http.get(Uri.parse(url));
     if (response.statusCode != 200) {
-      throw Exception('Failed to download file: $url');
+      throw Exception(
+        'Failed to download file: $url (Status: ${response.statusCode})',
+      );
     }
     await file.writeAsBytes(response.bodyBytes);
   }
