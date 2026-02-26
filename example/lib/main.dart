@@ -156,15 +156,6 @@ class _TtsDemoState extends State<TtsDemo> {
               ),
             ),
             const Spacer(),
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  "Note: The first run will download ~50MB of model data. Synthesizing happens entirely offline.",
-                  style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                ),
-              ),
-            ),
           ],
         ),
       ),
