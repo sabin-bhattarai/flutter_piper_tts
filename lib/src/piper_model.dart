@@ -21,11 +21,10 @@ class PiperModel {
     required this.modelPath,
     required this.tokensPath,
     required this.espeakDataPath,
-    this.speakerId = 0,
+    this.speakerId = 1,
     this.speed = 1.0,
   });
 
-  /// Checks if all local files exist.
   bool get exists =>
       File(modelPath).existsSync() &&
       File(tokensPath).existsSync() &&

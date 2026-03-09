@@ -120,7 +120,7 @@ class _TtsDemoState extends State<TtsDemo> {
                   groupValue: _selectedLanguage,
                   onChanged: (v) => setState(() {
                     _selectedLanguage = v!;
-                    _textController.text = "नमस्ते! यो पाइपर टीटीएस नेपालीमा बोल्दै छ।";
+                    _textController.text = "संख्या परीक्षण: ४५२४५२४५२ ,नेपाल एक सुन्दर देश हो। यहाँ हिमाल, पहाड र तराईका सुन्दर दृश्यहरू पाइन्छन्। सबैलाई धन्यवाद।";
                   }),
                 ),
                 const Text("Nepali"),

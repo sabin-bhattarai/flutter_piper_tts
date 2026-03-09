@@ -9,10 +9,9 @@ import 'piper_model.dart';
 class ModelDownloader {
   static const String _baseUrl = 'https://huggingface.co/csukuangfj';
   static const String _nepaliModelRepo =
-      'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-medium_int8.onnx';
+      'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-x_low_int8.onnx';
   static const String _espeakUrl = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/espeak-ng-data.tar.bz2';
 
-  /// Downloads the espeak-ng-data if it doesn't exist.
   Future<String> downloadEspeakData() async {
     final docDir = await getApplicationDocumentsDirectory();
     final espeakDir = Directory(p.join(docDir.path, 'espeak-ng-data'));
@@ -59,8 +58,8 @@ class ModelDownloader {
       repoName = 'vits-piper-en_US-lessac-medium';
       modelFileName = 'en_US-lessac-medium.onnx';
     } else if (language == 'ne') {
-      repoName = 'vits-piper-ne_NP-google-medium';
-      modelFileName = 'ne_NP-google-medium.onnx';
+      repoName = 'vits-piper-ne_NP-google-x_low';
+      modelFileName = 'ne_NP-google-x_low.onnx';
     } else {
       throw ArgumentError('Unsupported language: $language');
     }
