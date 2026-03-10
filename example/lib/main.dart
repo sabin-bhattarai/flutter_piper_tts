@@ -87,7 +87,7 @@ class _TtsDemoState extends State<TtsDemo> {
       setState(() {
         _status = "Error: $e";
       });
-      print(e);
+      debugPrint(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
