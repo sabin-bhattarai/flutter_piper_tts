@@ -98,7 +98,7 @@ class _TtsDemoState extends State<TtsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Piper TTS (Offline)')),
+      appBar: AppBar(title: const Text('Piper TTS')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(

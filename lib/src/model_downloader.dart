@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -7,9 +6,6 @@ import 'package:archive/archive.dart';
 import 'piper_model.dart';
 
 class ModelDownloader {
-  static const String _baseUrl = 'https://huggingface.co/csukuangfj';
-  static const String _nepaliModelRepo =
-      'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-x_low_int8.onnx';
   static const String _espeakUrl = 'https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/espeak-ng-data.tar.bz2';
 
   Future<String> downloadEspeakData() async {
@@ -53,6 +49,7 @@ class ModelDownloader {
 
     String repoName;
     String modelFileName;
+    String? baseUrl = 'https://huggingface.co/csukuangfj';
 
     if (language == 'en') {
       repoName = 'vits-piper-en_US-lessac-medium';
@@ -72,18 +69,25 @@ class ModelDownloader {
     final modelPath = p.join(modelDir.path, modelFileName);
     final tokensPath = p.join(modelDir.path, 'tokens.txt');
 
+    // Download model and tokens
     if (language == 'ne') {
-      await _downloadFile(_nepaliModelRepo, modelPath);
+      const String githubUrl =
+          'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-x_low_int8(1).onnx';
+      await _downloadFile(githubUrl, modelPath);
+      await _downloadFile(
+        '$baseUrl/$repoName/resolve/main/tokens.txt',
+        tokensPath,
+      );
     } else {
       await _downloadFile(
-        '$_baseUrl/$repoName/resolve/main/$modelFileName',
+        '$baseUrl/$repoName/resolve/main/$modelFileName',
         modelPath,
       );
+      await _downloadFile(
+        '$baseUrl/$repoName/resolve/main/tokens.txt',
+        tokensPath,
+      );
     }
-    await _downloadFile(
-      '$_baseUrl/$repoName/resolve/main/tokens.txt',
-      tokensPath,
-    );
 
     return PiperModel(
       modelPath: modelPath,

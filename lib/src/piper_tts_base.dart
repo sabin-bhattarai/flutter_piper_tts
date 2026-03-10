@@ -16,11 +16,10 @@ class PiperTts {
       return;
     }
 
-    final config = sherpa.OfflineTtsVitsModelConfig(
+    final vitsConfig = sherpa.OfflineTtsVitsModelConfig(
       model: model.modelPath,
-      lexicon: '',
       tokens: model.tokensPath,
-      dataDir: model.espeakDataPath,
+      dataDir: model.espeakDataPath ?? '',
       noiseScale: 0.667,
       noiseScaleW: 0.8,
       lengthScale: 1.0 / model.speed,
@@ -28,7 +27,7 @@ class PiperTts {
 
     final ttsConfig = sherpa.OfflineTtsConfig(
       model: sherpa.OfflineTtsModelConfig(
-        vits: config,
+        vits: vitsConfig,
         numThreads: 1,
         debug: false,
         provider: 'cpu',
