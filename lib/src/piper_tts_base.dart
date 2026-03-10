@@ -18,6 +18,7 @@ class PiperTts {
 
     final vitsConfig = sherpa.OfflineTtsVitsModelConfig(
       model: model.modelPath,
+      lexicon: '',
       tokens: model.tokensPath,
       dataDir: model.espeakDataPath ?? '',
       noiseScale: 0.667,
