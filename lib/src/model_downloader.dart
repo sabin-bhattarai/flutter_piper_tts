@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
@@ -16,7 +17,7 @@ class ModelDownloader {
       return espeakDir.path;
     }
 
-    print('Downloading espeak-ng-data...');
+    debugPrint('Downloading espeak-ng-data...');
     final response = await http.get(Uri.parse(_espeakUrl));
     if (response.statusCode != 200) {
       throw Exception('Failed to download espeak-ng-data');
@@ -49,14 +50,20 @@ class ModelDownloader {
 
     String repoName;
     String modelFileName;
-    String? baseUrl = 'https://huggingface.co/csukuangfj';
+    String modelUrl;
+    String tokensUrl;
+    const String baseUrl = 'https://huggingface.co/csukuangfj';
 
     if (language == 'en') {
       repoName = 'vits-piper-en_US-lessac-medium';
       modelFileName = 'en_US-lessac-medium.onnx';
+      modelUrl = '$baseUrl/$repoName/resolve/main/$modelFileName';
+      tokensUrl = '$baseUrl/$repoName/resolve/main/tokens.txt';
     } else if (language == 'ne') {
       repoName = 'vits-piper-ne_NP-google-x_low';
       modelFileName = 'ne_NP-google-x_low.onnx';
+      modelUrl = 'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-x_low_int8.onnx';
+      tokensUrl = '$baseUrl/$repoName/resolve/main/tokens.txt';
     } else {
       throw ArgumentError('Unsupported language: $language');
     }
@@ -69,25 +76,11 @@ class ModelDownloader {
     final modelPath = p.join(modelDir.path, modelFileName);
     final tokensPath = p.join(modelDir.path, 'tokens.txt');
 
-    // Download model and tokens
-    if (language == 'ne') {
-      const String githubUrl =
-          'https://github.com/sabin-bhattarai/compressed_piper_model/raw/main/ne_NP-google-x_low_int8(1).onnx';
-      await _downloadFile(githubUrl, modelPath);
-      await _downloadFile(
-        '$baseUrl/$repoName/resolve/main/tokens.txt',
-        tokensPath,
-      );
-    } else {
-      await _downloadFile(
-        '$baseUrl/$repoName/resolve/main/$modelFileName',
-        modelPath,
-      );
-      await _downloadFile(
-        '$baseUrl/$repoName/resolve/main/tokens.txt',
-        tokensPath,
-      );
-    }
+    // Optimization: Parallel downloads
+    await Future.wait([
+      _downloadFile(modelUrl, modelPath),
+      _downloadFile(tokensUrl, tokensPath),
+    ]);
 
     return PiperModel(
       modelPath: modelPath,
@@ -100,7 +93,7 @@ class ModelDownloader {
     final file = File(savePath);
     if (file.existsSync()) return;
 
-    print('Downloading $url...');
+    debugPrint('Downloading $url...');
     final response = await http.get(Uri.parse(url));
     if (response.statusCode != 200) {
       throw Exception(
