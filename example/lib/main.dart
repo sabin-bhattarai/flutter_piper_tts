@@ -98,7 +98,7 @@ class _TtsDemoState extends State<TtsDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Piper TTS (Offline)')),
+      appBar: AppBar(title: const Text('Piper TTS')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
@@ -120,7 +120,7 @@ class _TtsDemoState extends State<TtsDemo> {
                   groupValue: _selectedLanguage,
                   onChanged: (v) => setState(() {
                     _selectedLanguage = v!;
-                    _textController.text = "नमस्ते! यो पाइपर टीटीएस नेपालीमा बोल्दै छ।";
+                    _textController.text = "संख्या परीक्षण: ४५२४५२४५२ ,नेपाल एक सुन्दर देश हो। यहाँ हिमाल, पहाड र तराईका सुन्दर दृश्यहरू पाइन्छन्। सबैलाई धन्यवाद।";
                   }),
                 ),
                 const Text("Nepali"),
@@ -156,15 +156,6 @@ class _TtsDemoState extends State<TtsDemo> {
               ),
             ),
             const Spacer(),
-            const Card(
-              child: Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text(
-                  "Note: The first run will download ~50MB of model data. Synthesizing happens entirely offline.",
-                  style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                ),
-              ),
-            ),
           ],
         ),
       ),
